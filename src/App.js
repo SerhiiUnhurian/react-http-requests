@@ -1,13 +1,14 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import './App.css';
 import MoviesList from './components/MoviesList';
+import AddMovie from './components/AddMovie';
 
 function App() {
   const [movies, setMovies] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  const hanldeFetchMovies = async () => {
+  const loadMovies = async () => {
     setIsLoading(true);
     setError(null);
 
@@ -34,6 +35,15 @@ function App() {
     setIsLoading(false);
   };
 
+  useEffect(() => {
+    loadMovies();
+  }, []);
+
+  const handleFetchMovies = () => loadMovies();
+  const handleAddMovie = movie => {
+    console.log(movie);
+  };
+
   let content = <p>No movies.</p>;
 
   if (movies.length > 0) {
@@ -51,7 +61,10 @@ function App() {
   return (
     <React.Fragment>
       <section>
-        <button onClick={hanldeFetchMovies}>Fetch Movies</button>
+        <AddMovie onAddMovie={handleAddMovie} />
+      </section>
+      <section>
+        <button onClick={handleFetchMovies}>Fetch Movies</button>
       </section>
       <section>{content}</section>
     </React.Fragment>
